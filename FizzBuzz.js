@@ -16,4 +16,3 @@ while (num<=N) {
     num++;
 }
 // JavaScript source code
-
