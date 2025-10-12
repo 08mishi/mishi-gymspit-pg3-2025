@@ -1,17 +1,17 @@
-num = 0;
-N = console.readLine("Input max: ");
+num = 1;
+N = console.ReadLine("Input max: ");
 while (num<=N) {
     if (num % 3 == 0 && num % 5 == 0) {
         console.writeLine("FizzBuzz");
     }
     else if (num % 3 == 0) {
-        console.writeLIne("Fizz");
+        console.WriteLine("Fizz");
     }
     else if (num % 5 == 0) {
-        console.writeline("Buzz");
+        console.WriteLine("Buzz");
     }
     else {
-        console.writeline(num);
+        console.WriteLine(num);
     }
     num++;
 }
