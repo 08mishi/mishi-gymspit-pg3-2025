@@ -2,7 +2,7 @@ num = 1;
 N = console.ReadLine("Input max: ");
 while (num<=N) {
     if (num % 3 == 0 && num % 5 == 0) {
-        console.writeLine("FizzBuzz");
+        console.WriteLine("FizzBuzz");
     }
     else if (num % 3 == 0) {
         console.WriteLine("Fizz");
@@ -16,3 +16,4 @@ while (num<=N) {
     num++;
 }
 // JavaScript source code
+
