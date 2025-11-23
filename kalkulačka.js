@@ -1,54 +1,69 @@
-﻿bool calculation = true;
-bool IsNumber = true;
-while (calculation == true)
+using System;
+
+class Program
 {
-    Console.WriteLine("Choose an operator (+; -; *; /; exit): ");
-    string input = Console.ReadLine();
-    if (input == "exit")
+    static void Main()
     {
-        calculation = false;
-    }
-    else if (input == "+" || input == "-" || input == "*" || input == "/")
-    {
-        Console.WriteLine("Enter the first number: ");
-        IsNumber = float.TryParse(Console.ReadLine(), out float num1);
-        if (IsNumber == false)
-        {
-            Console.WriteLine("Invalid number, try again");
-            continue;
-        }
-        Console.WriteLine("Enter the second number: ");
-        IsNumber = float.TryParse(Console.ReadLine(), out float num2);
-        if (IsNumber == false)
-        {
-            Console.WriteLine("Invalid number, try again");
-            continue;
-        }
-        if (input == "+")
-        {
-            Console.WriteLine("{0} + {1} = " + (num1 + num2), num1, num2);
-        }
-        else if (input == "-")
-        {
-            Console.WriteLine("{0} - {1} = " + (num1 - num2), num1, num2);
-        }
-        else if (input == "*")
-        {
-            Console.WriteLine("{0} * {1} = " + (num1 * num2), num1, num2);
-        }
-        else if (input == "/")
-        {
-            Console.WriteLine("{0} / {1} = " + (num1 / num2), num1, num2);
-        }
+        Console.WriteLine("Jednoduchá kalkulačka");
 
-        
-    }
+        while (true)
+        {
+            // Zvolení operace
+            Console.Write("Zadej operaci (+, -, *, /), nebo 'konec': ");
+            string operace = Console.ReadLine();
 
-    else
-    {
-        Console.WriteLine("Invalid operator, try again");
+            if (operace == "konec")
+            {
+                Console.WriteLine("Program ukončen.");
+                break;
+            }
+
+            // Načtení prvního čísla s kontrolou
+            Console.Write("Zadej první číslo: ");
+            double a;
+            while (!double.TryParse(Console.ReadLine(), out a))
+            {
+                Console.WriteLine("To není platné číslo, zkus to znovu.");
+                Console.Write("Zadej první číslo: ");
+            }
+
+            // Načtení druhého čísla s kontrolou
+            Console.Write("Zadej druhé číslo: ");
+            double b;
+            while (!double.TryParse(Console.ReadLine(), out b))
+            {
+                Console.WriteLine("To není platné číslo, zkus to znovu.");
+                Console.Write("Zadej druhé číslo: ");
+            }
+
+            // Výpočet podle zvolené operace
+            if (operace == "+")
+            {
+                Console.WriteLine("Výsledek: " + (a + b));
+            }
+            else if (operace == "-")
+            {
+                Console.WriteLine("Výsledek: " + (a - b));
+            }
+            else if (operace == "*")
+            {
+                Console.WriteLine("Výsledek: " + (a * b));
+            }
+            else if (operace == "/")
+            {
+                if (b == 0)
+                {
+                    Console.WriteLine("Dělení nulou není povoleno");
+                }
+                else
+                {
+                    Console.WriteLine("Výsledek: " + (a / b));
+                }
+            }
+            else
+            {
+                Console.WriteLine("Neplatná operace, zkus to znovu.");
+            }
+        }
     }
 }
-
-    // JavaScript source code
-
