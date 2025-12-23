@@ -99,89 +99,73 @@ static string[] GetUserPosts(string user, string[] posts, string[] postAuthors, 
 
 static void AddFollow(string follower, string followee, string[] followers, string[] followees, ref int followCount)
 {
-	int index = Array.IndexOf(followee, follower);
-	if (index >= 0)
-	{
-		Console.WriteLine("Follow alredy exists.");
+	if (follower == followee) {
+		Console.WriteLine("User cannot follow itself");
 		return;
 	}
-	if (AddValue(follower, followers, followCount) && AddValue(followee, followees, followCount))
-	{
-		followCount += 1;
-	}
-	else
-	{
-		Console.WriteLine("I'm afraid I can't do that.");
+	int followerIndex = Array.IndexOf(follower, followers);
+	int followeeIndex = Array.IndexOf(followee, followees);
+	if (followerIndex == followeeIndex) {
+		Console.WriteLine("These users already follow each other.");
 		return;
 	}
-	if (AddValue(followee, followees, followCount))
-	{
-		followCount += 1;
-	}
-	else
-	{
-		Console.WriteLine("I'm afraid I can't do that.");
-		return;
-	}
+	followers[followCount] = follower;
+	followees[followCount] = followee;
+	followCount++;
+	return;
 }
 
 static void RemoveFollow(string follower, string followee, string[] followers, string[] followees, ref int followCount)
 {
-	int indexer = -1;
-	int index = -1;
-	for (int i = 0; i < followCount; i += 1)
-	{
-		if (followers[i] == follower && followees[i] == followee)
-		{
-			indexer = i;
-			break;
-		}
-    }
-    {
-        
-    }
-    if (indexer < 0 || index >= count)
-	{
-		Console.WriteLine("Follow does not exist.");
+	int followerIndex = Array.IndexOf(follower, followers);
+	int followeeIndex = Array.IndexOf(followee, followees);
+	if (followerIndex != followeeIndex) {
+		Console.WriteLine("These users already follow each other.");
 		return;
 	}
-	for (int i = indexer; i < followCount - 1; i += 1)
+	if (removeValue(followers, follower, followCount) && (followees, followee, followCount))
 	{
-		followers[i] = followCount[i + 1];
-		followCount[i] = followCount[i + 1];
-    }
-	followCount[followCount - 1] = "";
-	if (indexer >= 0 && RemoveValue(followers, indexer, followCount) && RemoveValue(followees, indexer, followCount))
-	{
-		followCount -= 1;
-	}
-	else
-	{
-		Console.WriteLine("I'm afraid I can't do that.");
+		followCount--;
 		return;
 	}
 }
 
 static string[] GetUserFollows(string user, string[] followers, string[] followees, int followCount)
 {
-	int index = AddFollow(user, followers, followCount);
-	if (index < 0)
-	{
-		Console.WriteLine("User doesn't exist");
+	int index = Array.IndexOf(user, followers);
+	if (index < 0) {
+		Console.WriteLine("This user is not following anybody.");
 		return;
 	}
-	else if (index >= 0)
-	{
-	 List
+	string[] userFollows = new string[followCount];
+	for (int i == 0; i < followCount;) {
+		for (int j == 0; j < followCount.Length; j++) {
+			if (followers[j] == user) {
+				userFollows[i] = followees[j];
+				i++;
+			}
+		}
 	}
-
-		return new string[] { };
+	return userFollows;
 }
 
 static string[] GetUserFollowers(string user, string[] followers, string[] followees, int followCount)
 {
-	// TODO
-	return new string[] { };
+	int index = Array.IndexOf(user, followees);
+	if (index < 0) {
+		Console.WriteLine("Nobody follows this user.");
+		return;
+	}
+	string[] userIsFollowed = new string[followCount];
+	for (int i ==0; i < followCount;) {
+		for (int j == 0; j < followCount.Length; j++) {
+			if (followees[j] == user) {
+				userIsFollowed[i] = followers[j];
+				i++;
+			}
+		}
+	}
+	retuen userIsFollowed;
 }
 
 
