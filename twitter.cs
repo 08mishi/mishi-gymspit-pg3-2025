@@ -77,29 +77,23 @@ static string[] GetUserPosts(string user, string[] posts, string[] postAuthors, 
 	int index = Array.IndexOf(postAuthors, user);
 	if (index < 0)
 	{
-		Console.WriteLine("User doesn't exist");
+		Console.WriteLine("User hasn´t made any posts yet or doesn't exist");
 		return;
     }
-	if (index >= 0)
-	{
 	
-		List<string> userPosts = new List<string>();
-		for (int i == 0; i < postCount; i += 1)
-		{
-			if (postAuthors[i] == user) ;
-			{
-				userPosts.Add(posts[i]);
-			}
-			return userPosts.ToArray();
-
-        }
-
-    }
-	if (AddValue(user, postAuthors, postCount))
+	string[] userPosts = new string[postCount];
+	for (int i == 0; i < postCount;)
 	{
-		postCount += 1;
+		for (int j == 0; j < posts.Length; j++)
+		{
+			if (postAuthors[j] == user);
+			{
+				userPosts[i] = posts[j];
+				i++;
+			}
+		}
 	}
-
+	return userPosts;
  }
 
 
