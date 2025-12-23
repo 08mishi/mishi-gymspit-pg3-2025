@@ -4,7 +4,7 @@ class Program
 {
     static void Main()
     {
-        Console.WriteLine("Jednoduchá kalkulačka");
+        Console.WriteLine("kalkulačka");
 
         while (true)
         {
@@ -67,3 +67,4 @@ class Program
         }
     }
 }
+
