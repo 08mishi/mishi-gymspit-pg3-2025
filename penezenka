@@ -1,0 +1,4 @@
+int N = 100
+let transakce = new Array(N);
+let položky = new Array(N);
+
