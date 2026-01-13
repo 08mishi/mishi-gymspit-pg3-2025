@@ -46,6 +46,7 @@ function výpisTransakcí (seznam) {
     }
     Console.WriteLine("Hodnota: " + seznam[i].hodnota + " Název: " + seznam[i].název + "Kategorie: " + seznam[i].kategorie);
   }
+Console.WriteLine("Součet: " + soucet + "Nejvyšší výdaj: " + nejvyssiVýdaj + "Nejnižší výdaj: " + nejnižšíVýdaj);
 }
 
 function výspisSFiltrem (seznam, filtr) {
