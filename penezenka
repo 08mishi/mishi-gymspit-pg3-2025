@@ -1,4 +1,56 @@
-int N = 100
-let transakce = new Array(N);
-let položky = new Array(N);
+let transakce = [];
 
+function boolean přidatTransakci (hodnota, název, kategorie) {
+  if (!Number.IsInteger(hodnota)) {
+    Console.WriteLine("hodnota není integer");
+    return false;
+  }
+  transakce.push({hodnota: hodnota, název: název, kategorie: kategorie});
+  return true;
+}
+
+function boolean upravitTransakci (index, hodnota, název, kategorie) {
+  if (index < 0 || index > transakce.length) {
+    Console.WriteLine("index je mimo rozsah");
+    return false;
+  }
+   if (!Number.IsInteger(hodnota)) {
+    Console.WriteLine("hodnota není integer");
+    return false;
+  }
+  transakce[index] = {hodnota: hodnota, název: název, kategorie: kategorie};
+  return true;
+}
+
+function boolean smazatTransakci (index) {
+  if (index < 0 || index > transakce.length) {
+    Console.WriteLine("index je mimo rozsah");
+    return false;
+  }
+  for (int i = index; i < transakce.length - 1; i += 1) {
+		transakce[i] = transakce[i + 1];
+	}
+}
+
+function výpisTransakcí (seznam) {
+  let soucet = 0;
+  let nejvyssiVýdaj = 0;
+  let nejnižšíVýdaj = 0;
+  for (int i = 0; i < seznam.length; i++){
+    soucet += seznam[i].hodnota;
+    if (nejvyssiVýdaj < hodnota) {
+      nejvyssiVýdaj = hodnota;
+    }
+    if (nejnižšíVýdaj > hodnota) {
+      nejvynižšíVýdaj = hodnota;
+    }
+    Console.WriteLine("Hodnota: " + seznam[i].hodnota + " Název: " + seznam[i].název + "Kategorie: " + seznam[i].kategorie);
+  }
+}
+
+function výspisSFiltrem (seznam, filtr) {
+  seznam.filter(x => x.název === filtr);
+  for (int i = 0; i < seznam.length; i++){
+    Console.WriteLine("Hodnota: " + seznam[i].hodnota + " Název: " + seznam[i].název + "Kategorie: " + seznam[i].kategorie);
+  }
+}
