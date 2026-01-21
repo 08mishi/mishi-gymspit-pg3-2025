@@ -1,57 +1,318 @@
-let transakce = [];
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-function boolean přidatTransakci (hodnota, název, kategorie) {
-  if (!Number.IsInteger(hodnota)) {
-    Console.WriteLine("hodnota není integer");
-    return false;
-  }
-  transakce.push({hodnota: hodnota, název: název, kategorie: kategorie});
-  return true;
-}
+class Transakce
+{
+    public int Hodnota;
+    public string Nazev;
+    public string Kategorie;
 
-function boolean upravitTransakci (index, hodnota, název, kategorie) {
-  if (index < 0 || index > transakce.length) {
-    Console.WriteLine("index je mimo rozsah");
-    return false;
-  }
-   if (!Number.IsInteger(hodnota)) {
-    Console.WriteLine("hodnota není integer");
-    return false;
-  }
-  transakce[index] = {hodnota: hodnota, název: název, kategorie: kategorie};
-  return true;
-}
-
-function boolean smazatTransakci (index) {
-  if (index < 0 || index > transakce.length) {
-    Console.WriteLine("index je mimo rozsah");
-    return false;
-  }
-  for (int i = index; i < transakce.length - 1; i += 1) {
-		transakce[i] = transakce[i + 1];
-	}
-}
-
-function výpisTransakcí (seznam) {
-  let soucet = 0;
-  let nejvyssiVýdaj = 0;
-  let nejnižšíVýdaj = 0;
-  for (int i = 0; i < seznam.length; i++){
-    soucet += seznam[i].hodnota;
-    if (nejvyssiVýdaj < hodnota) {
-      nejvyssiVýdaj = hodnota;
+    public Transakce(int hodnota, string nazev, string kategorie)
+    {
+        Hodnota = hodnota;
+        Nazev = nazev ?? string.Empty;
+        Kategorie = kategorie ?? string.Empty;
     }
-    if (nejnižšíVýdaj > hodnota) {
-      nejvynižšíVýdaj = hodnota;
-    }
-    Console.WriteLine("Hodnota: " + seznam[i].hodnota + " Název: " + seznam[i].název + "Kategorie: " + seznam[i].kategorie);
-  }
-Console.WriteLine("Součet: " + soucet + "Nejvyšší výdaj: " + nejvyssiVýdaj + "Nejnižší výdaj: " + nejnižšíVýdaj);
 }
 
-function výspisSFiltrem (seznam, filtr) {
-  seznam.filter(x => x.název === filtr);
-  for (int i = 0; i < seznam.length; i++){
-    Console.WriteLine("Hodnota: " + seznam[i].hodnota + " Název: " + seznam[i].název + "Kategorie: " + seznam[i].kategorie);
-  }
+class Program
+{
+    static List<Transakce> transakce = new List<Transakce>();
+    static string DATA_FILE = "data.txt";
+
+    static bool pridatTransakci(int hodnota, string nazev, string kategorie)
+    {
+        transakce.Add(new Transakce(hodnota, nazev, kategorie));
+        return true;
+    }
+
+    static bool upravitTransakci(int index, int hodnota, string nazev, string kategorie)
+    {
+        if (index < 0 || index >= transakce.Count)
+        {
+            Console.WriteLine("index je mimo rozsah");
+            return false;
+        }
+
+        transakce[index].Hodnota = hodnota;
+        transakce[index].Nazev = nazev ?? string.Empty;
+        transakce[index].Kategorie = kategorie ?? string.Empty;
+        return true;
+    }
+
+    static bool smazatTransakci(int index)
+    {
+        if (index < 0 || index >= transakce.Count)
+        {
+            Console.WriteLine("index je mimo rozsah");
+            return false;
+        }
+
+        transakce.RemoveAt(index);
+        return true;
+    }
+
+    static void vypisTransakci(List<Transakce> seznam)
+    {
+        if (seznam == null || seznam.Count == 0)
+        {
+            Console.WriteLine("Žádné transakce.");
+            return;
+        }
+
+        long soucet = 0;
+        int nejvyssi = int.MinValue;
+        int nejnizsi = int.MaxValue;
+
+        for (int i = 0; i < seznam.Count; i++)
+        {
+            var t = seznam[i];
+            soucet += t.Hodnota;
+            if (t.Hodnota > nejvyssi) nejvyssi = t.Hodnota;
+            if (t.Hodnota < nejnizsi) nejnizsi = t.Hodnota;
+            Console.WriteLine($"[{i}] Hodnota: {t.Hodnota}  Název: {t.Nazev}  Kategorie: {t.Kategorie}");
+        }
+
+        Console.WriteLine($"Součet: {soucet}  Nejvyšší výdaj: {nejvyssi}  Nejnižší výdaj: {nejnizsi}");
+    }
+
+    static void vypisSFiltre(List<Transakce> seznam, string filtr)
+    {
+        if (seznam == null || seznam.Count == 0)
+        {
+            Console.WriteLine("Žádné transakce.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(filtr))
+        {
+            Console.WriteLine("Prázdný filtr.");
+            vypisTransakci(seznam);
+            return;
+        }
+
+        var vyfiltrovane = new List<(int idx, Transakce t)>();
+        for (int i = 0; i < seznam.Count; i++)
+        {
+            var x = seznam[i];
+            if (!string.IsNullOrEmpty(x.Nazev) && x.Nazev.IndexOf(filtr, StringComparison.CurrentCultureIgnoreCase) >= 0)
+            {
+                vyfiltrovane.Add((i, x));
+            }
+        }
+
+        if (vyfiltrovane.Count == 0)
+        {
+            Console.WriteLine("Filtru neodpovídají žádné položky.");
+            return;
+        }
+
+        for (int i = 0; i < vyfiltrovane.Count; i++)
+        {
+            var pair = vyfiltrovane[i];
+            var t = pair.t;
+            Console.WriteLine($"[{pair.idx}] Hodnota: {t.Hodnota}  Název: {t.Nazev}  Kategorie: {t.Kategorie}");
+        }
+    }
+
+    static void ulozitDoSouboru()
+    {
+        try
+        {
+            var lines = transakce.Select(t => $"{t.Hodnota};{t.Nazev};{t.Kategorie}");
+            File.WriteAllLines(DATA_FILE, lines);
+            Console.WriteLine("Uloženo do souboru.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Chyba pri ukladani: " + e.Message);
+        }
+    }
+
+    static void nactiZeSouboru()
+    {
+        try
+        {
+            if (!File.Exists(DATA_FILE))
+            {
+                Console.WriteLine("Soubor neexistuje.");
+                return;
+            }
+
+            var lines = File.ReadAllLines(DATA_FILE);
+            transakce.Clear();
+            foreach (var raw in lines)
+            {
+                if (string.IsNullOrWhiteSpace(raw)) continue;
+                var parts = raw.Split(';');
+                if (parts.Length < 1) continue;
+                if (!int.TryParse(parts[0], out var hodnota)) continue;
+                var nazev = parts.Length > 1 ? parts[1] : string.Empty;
+                var kategorie = parts.Length > 2 ? parts[2] : string.Empty;
+                transakce.Add(new Transakce(hodnota, nazev, kategorie));
+            }
+            Console.WriteLine("Nacteno ze souboru.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Chyba pri nacitani: " + e.Message);
+        }
+    }
+
+    static int ReadIntRequired(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            var s = Console.ReadLine();
+            if (int.TryParse(s?.Trim(), out var v)) return v;
+            Console.WriteLine("Neplatné cislo, zadejte znovu.");
+        }
+    }
+
+    static int? ReadIntNullable(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            var s = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(s)) return null;
+            if (int.TryParse(s.Trim(), out var v)) return v;
+            Console.WriteLine("Neplatné cislo, zadejte znovu nebo stisknete Enter pro zruseni.");
+        }
+    }
+
+    static string ReadStringOptional(string prompt)
+    {
+        Console.Write(prompt);
+        return Console.ReadLine() ?? string.Empty;
+    }
+
+    static void Main()
+    {
+        nactiZeSouboru();
+
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== Penezenka ===");
+            Console.WriteLine("1) Pridat zaznam");
+            Console.WriteLine("2) Vypsat zaznamy");
+            Console.WriteLine("3) Upravit zaznam");
+            Console.WriteLine("4) Smazat zaznam");
+            Console.WriteLine("5) Vypsat s filtrem");
+            Console.WriteLine("6) Uložit do souboru");
+            Console.WriteLine("7) Nacist ze souboru");
+            Console.WriteLine("0) Konec programu");
+            Console.Write("Volba: ");
+            var volba = Console.ReadLine()?.Trim();
+
+            Console.WriteLine();
+            switch (volba)
+            {
+                case "1":
+                    {
+                        Console.WriteLine("=== Pridat zaznam ===");
+                        var hod = ReadIntRequired("Zadejte hodnotu (int): ");
+                        var nazev = ReadStringOptional("Nazev: ");
+                        var kat = ReadStringOptional("Kategorie: ");
+                        if (pridatTransakci(hod, nazev, kat))
+                            Console.WriteLine("Pridano.");
+                        else
+                            Console.WriteLine("Pridani neprobehlo.");
+                        break;
+                    }
+                case "2":
+                    Console.WriteLine("=== Vsechny transakce ===");
+                    vypisTransakci(transakce);
+                    break;
+                case "3":
+                    {
+                        Console.WriteLine("=== Upravit zaznam ===");
+                        if (transakce.Count == 0)
+                        {
+                            Console.WriteLine("nejsou zadne transakce k uprave.");
+                            break;
+                        }
+                        vypisTransakci(transakce);
+                        int idx = ReadIntRequired($"Zadejte cislo polozky k uprave: ");
+                        if (idx < 0 || idx >= transakce.Count)
+                        {
+                            Console.WriteLine("Index mimo rozsah.");
+                            break;
+                        }
+                        var current = transakce[idx];
+                        Console.WriteLine($"Aktualni hodnota: {current.Hodnota}");
+                        var newHod = ReadIntNullable("Nova hodnota (Enter = ponechat): ");
+                        Console.WriteLine($"Aktualni nazev: {current.Nazev}");
+                        var newNaz = Console.ReadLine();
+                        Console.WriteLine($"Aktualni kategorie: {current.Kategorie}");
+                        var newKat = Console.ReadLine();
+
+                        int finalHodnota = newHod ?? current.Hodnota;
+                        string finalNazev = string.IsNullOrEmpty(newNaz) ? current.Nazev : newNaz;
+                        string finalKategorie = string.IsNullOrEmpty(newKat) ? current.Kategorie : newKat;
+
+                        if (upravitTransakci(idx, finalHodnota, finalNazev, finalKategorie))
+                            Console.WriteLine("Upraveno.");
+                        else
+                            Console.WriteLine("Uprava neprobehla.");
+                        break;
+                    }
+                case "4":
+                    {
+                        Console.WriteLine("=== Smazat zaznam ===");
+                        if (transakce.Count == 0)
+                        {
+                            Console.WriteLine("Nejsou zadne transakce ke smazeni.");
+                            break;
+                        }
+                        vypisTransakci(transakce);
+                        int idx = ReadIntRequired($"Zadejte cislo položky ke smazani: ");
+                        if (idx < 0 || idx >= transakce.Count)
+                        {
+                            Console.WriteLine("Index mimo rozsah.");
+                            break;
+                        }
+                        Console.Write("Opravdu smazat? (Ano/Ne): ");
+                        var conf = Console.ReadLine()?.Trim().ToUpperInvariant();
+                        if (conf == "ANO" || conf == "A" || conf == "Y")
+                        {
+                            if (smazatTransakci(idx))
+                                Console.WriteLine("Smazano.");
+                            else
+                                Console.WriteLine("Smazani neprobehlo.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Smazání zruseno.");
+                        }
+                        break;
+                    }
+                case "5":
+                    {
+                        Console.Write("Zadejte filtr: ");
+                        var filtr = Console.ReadLine() ?? string.Empty;
+                        Console.WriteLine($"=== Vypis polozek obsahujících '{filtr}' ===");
+                        vypisSFiltre(transakce, filtr);
+                        break;
+                    }
+                case "6":
+                    ulozitDoSouboru();
+                    break;
+                case "7":
+                    nactiZeSouboru();
+                    break;
+                case "0":
+                    ulozitDoSouboru();
+                    Console.WriteLine("Ulozeno.");
+                    return;
+                default:
+                    Console.WriteLine("Zkuste znovu.");
+                    break;
+            }
+        }
+    }
 }
