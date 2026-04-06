@@ -1,0 +1,90 @@
+
+static void Question1() {
+    Console.WriteLine("What is the capital so France?");
+    if (Console.ReadLine()?.ToLower() == "paris") {
+        Console.WriteLine("Correct!");
+        Question2();
+    } else {
+        Console.WriteLine("Wrong! Try again.");
+        Question1();
+    }
+}
+
+static void Question2() {
+    Console.WriteLine("What is the capital so Germany?");
+    if (Console.ReadLine()?.ToLower() == "berlin") {
+        Console.WriteLine("Correct!");
+        Question3();
+    }
+    else {
+        Console.WriteLine("Wrong! Try again.");
+        Question2();
+    }
+}
+
+
+static void Question3()  {
+    Console.WriteLine("What is 2+2?");
+    if (Console.ReadLine()?.ToLower() == "4") {
+        Console.WriteLine("Correct!");
+        Question4();
+    }
+    else {
+        Console.WriteLine("Wrong! Try again.");
+        Question3();
+    }
+}
+
+static void Question4()
+{
+    Console.WriteLine("What is 3*9?");
+    if (Console.ReadLine()?.ToLower() == "27")  {
+        Console.WriteLine("Correct!");
+        Question5();
+    }
+    else {
+        Console.WriteLine("Wrong! Try again.");
+        Question4();
+    }
+}
+
+static void Question5()
+{
+    Console.WriteLine("Where is Big Ben located?");
+    if (Console.ReadLine()?.ToLower() == "london")  {
+        Console.WriteLine("Correct!");
+        Question6();
+    }
+    else {
+        Console.WriteLine("Wrong! Try again.");
+        Question5();
+    }
+}
+
+static void Question6()
+{
+    Console.WriteLine("Where is the Eiffel tower?");
+    if (Console.ReadLine()?.ToLower() == "paris") {
+        Console.WriteLine("Correct!");
+        Question7();
+    }
+    else
+    {
+        Console.WriteLine("Wrong! Try again.");
+        Question6();
+    }
+}
+
+static void Question7()
+{
+    Console.WriteLine("What color is the sun?");
+    if (Console.ReadLine()?.ToLower() == "yellow") {
+        Console.WriteLine("Correct! Quiz completed!!!!!!!!");
+    }
+    else {
+        Console.WriteLine("Wrong! Try again.");
+        Question7();
+    }
+}
+
+Question1();
