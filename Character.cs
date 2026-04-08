@@ -11,10 +11,8 @@ namespace GymSpit
         public int Agility { get; set; }
         public bool Alive { get; set; }
 
-        // VELKÁ FUNKCE 1: ArmorBonus - zvyšuje se při defense, snižuje se při útoku
         public int ArmorBonus { get; set; }
 
-        // VELKÁ FUNKCE 2: AttackComboBonus - zvyšuje se při úspěšném útoku, resetuje se na miss
         public int AttackComboBonus { get; set; }
 
         public Character(string name, int maxHitPoints, int armor, int agility)
